@@ -1,0 +1,56 @@
+CREATE DATABASE IF NOT EXISTS bankdb;
+USE bankdb;
+
+CREATE TABLE IF NOT EXISTS customers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100),
+  phone VARCHAR(30)
+);
+
+CREATE TABLE IF NOT EXISTS branches (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  address VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS accounts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  customer_id INT,
+  branch_id INT,
+  balance DOUBLE DEFAULT 0,
+  type VARCHAR(30),
+  FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
+  FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS loans (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  customer_id INT,
+  principal DOUBLE,
+  outstanding DOUBLE,
+  FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS cards (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  customer_id INT,
+  card_number VARCHAR(30),
+  type VARCHAR(30),
+  FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50),
+  password VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  account_id INT,
+  amount DOUBLE,
+  type VARCHAR(10),
+  timestamp DATETIME,
+  FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+);
